@@ -1,4 +1,3 @@
-// src/app/project/[slug]/page.tsx
 import { client } from "@/sanity/lib/client";
 import ProjectHeader from "@/components/ProjectHeader";
 import ProjectVideoSection from "@/components/ProjectVideoSection";
@@ -24,9 +23,11 @@ async function getProjectDetail(slug: string) {
 }
 
 async function getRecommendations(currentSlug: string) {
+  // Tambahkan videoUrl supaya video di grid rekomendasi juga ikut autoplay
   const query = `*[_type == "project" && slug.current != $currentSlug][0...6] {
     title,
-    "slug": slug.current
+    "slug": slug.current,
+    videoUrl
   }`;
   return await client.fetch(query, { currentSlug });
 }

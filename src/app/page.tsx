@@ -8,17 +8,16 @@ import Footer from "@/components/Footer";
 export const revalidate = 0;
 
 async function getAllProjects() {
-  // 2. Kita perbaiki query GROQ agar membongkar file video menjadi URL matang (.asset->url)
+  // Query ini otomatis memeriksa apakah nama field kamu 'video', 'videoLink', atau 'url'
   const query = `*[_type == "project"] | order(_createdAt desc) {
     title,
     "slug": slug.current,
     category,
-    "videoUrl": video.asset->url
+    "videoUrl": coalesce(video.asset->url, videoLink.asset->url, url.asset->url, video, videoLink, url)
   }`;
   const data = await client.fetch(query);
   return data;
 }
-
 export default async function HomePage() {
   const projects = await getAllProjects();
 

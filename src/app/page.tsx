@@ -4,12 +4,16 @@ import Hero from "@/components/Hero";
 import ProjectGallery from "@/components/ProjectGallery";
 import Footer from "@/components/Footer";
 
+// 1. Tambahkan ini agar Vercel selalu mengambil data video terbaru dari Sanity tanpa cache statis
+export const revalidate = 0;
+
 async function getAllProjects() {
+  // 2. Kita perbaiki query GROQ agar membongkar file video menjadi URL matang (.asset->url)
   const query = `*[_type == "project"] | order(_createdAt desc) {
     title,
     "slug": slug.current,
     category,
-    videoUrl
+    "videoUrl": video.asset->url
   }`;
   const data = await client.fetch(query);
   return data;

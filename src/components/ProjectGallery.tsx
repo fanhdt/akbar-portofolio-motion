@@ -65,7 +65,7 @@ function ProjectVideoThumb({ title, videoUrl }: { title: string; videoUrl: strin
   useEffect(() => {
     if (!embedUrl) return;
     // Durasi sedikit lebih lama supaya benar-benar nutupin proses buffering awal
-    const timer = setTimeout(() => setIsReady(true), 2500);
+    const timer = setTimeout(() => setIsReady(true), 3500);
     return () => clearTimeout(timer);
   }, [embedUrl]);
 

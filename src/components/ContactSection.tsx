@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// src/components/ContactSection.tsx
 "use client";
 
 import { useState, FormEvent } from "react";
@@ -39,8 +38,6 @@ export default function ContactSection() {
 
     try {
       const formData = new FormData();
-
-      // Mengambil token aman menggunakan NEXT_PUBLIC_
       const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
       if (!accessKey) {
         throw new Error("Token Web3Forms tidak ditemukan.");
@@ -54,7 +51,6 @@ export default function ContactSection() {
       formData.append("project_title", form.projectTitle);
       formData.append("message", form.message);
 
-      // Tembak langsung dari browser user ke Web3Forms pusat
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: formData,

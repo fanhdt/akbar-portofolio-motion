@@ -1,4 +1,3 @@
-// src/components/AboutMe.tsx
 import Image from "next/image";
 
 interface AboutMeData {
@@ -14,7 +13,7 @@ interface AboutMeData {
   links: { label: string; href: string }[];
 }
 
-// Data sementara - nanti bisa dipindah ke Sanity (schema "about" / singleton document)
+
 const aboutData: AboutMeData = {
   name: "Muhammad Akbar Robbani",
   role: "Motion Designer",

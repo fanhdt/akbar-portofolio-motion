@@ -1,4 +1,3 @@
-// src/components/Hero.tsx
 export default function Hero() {
   return (
     <section className=" max-w-3xl mb-12 animate-fade-in">

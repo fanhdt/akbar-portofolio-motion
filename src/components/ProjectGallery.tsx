@@ -52,12 +52,6 @@ function getEmbedUrl(url: string) {
   return url;
 }
 
-/**
- * Komponen terpisah per-card supaya tiap video punya state "ready" sendiri.
- * Overlay solid HITAM PEKAT (bukan abu-abu) menutupi iframe selama beberapa
- * saat pertama untuk menyembunyikan flash logo/tombol/garis loading YouTube
- * yang muncul sebelum autoplay benar-benar jalan bersih.
- */
 function ProjectVideoThumb({ title, videoUrl }: { title: string; videoUrl: string }) {
   const [isReady, setIsReady] = useState(false);
   const embedUrl = getEmbedUrl(videoUrl);

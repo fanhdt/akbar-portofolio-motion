@@ -1,4 +1,3 @@
-// src/components/ProjectHeader.tsx
 interface ProjectHeaderProps {
   project: {
     title?: string;

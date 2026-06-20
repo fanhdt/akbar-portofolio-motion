@@ -1,4 +1,3 @@
-// src/app/page.tsx
 import { client } from "../sanity/lib/client";
 import Hero from "@/components/Hero";
 import ProjectGallery from "@/components/ProjectGallery";
@@ -8,7 +7,6 @@ import Footer from "@/components/Footer";
 export const revalidate = 0;
 
 async function getAllProjects() {
-  // videoUrl adalah field type "url" biasa (string), langsung ambil tanpa coalesce/asset->url
   const query = `*[_type == "project"] | order(_createdAt desc) {
     title,
     "slug": slug.current,

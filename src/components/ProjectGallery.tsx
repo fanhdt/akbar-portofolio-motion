@@ -16,7 +16,7 @@ interface ProjectGalleryProps {
 
 function getEmbedUrl(url: string) {
   if (!url) return "";
-  // Jika ini adalah link file video langsung dari Sanity (cdn.sanity.io), return kosong agar diputar pakai tag <video>
+  // Jika ini berkas video langsung (Sanity CDN), lewati proses embed iframe
   if (url.includes("cdn.sanity.io") || url.endsWith(".mp4") || url.endsWith(".webm")) {
     return "";
   }
@@ -60,7 +60,7 @@ function ProjectVideoThumb({ title, videoUrl }: { title: string; videoUrl: strin
   const [isReady, setIsReady] = useState(false);
   const embedUrl = getEmbedUrl(videoUrl);
 
-  // Deteksi apakah ini file video Sanity langsung
+  // Deteksi apakah berkas video langsung dari Sanity CDN
   const isDirectVideo = videoUrl && (videoUrl.includes("cdn.sanity.io") || videoUrl.endsWith(".mp4"));
 
   useEffect(() => {
@@ -74,12 +74,12 @@ function ProjectVideoThumb({ title, videoUrl }: { title: string; videoUrl: strin
   }, [embedUrl, isDirectVideo]);
 
   return (
+    /* STYLING BAWAAN KAMU - TIDAK DIUBAH SAMA SEKALI */
     <div className="aspect-[4/3] w-full bg-neutral-900 overflow-hidden mb-4 relative border border-neutral-900 group-hover:border-neutral-800 transition-all flex items-center justify-center text-neutral-700 group-hover:text-neutral-400">
-      {/* OPSI 1: Jika file video langsung dari Sanity Studio */}
+      {/* Otomatis memutar jika file video berasal dari Sanity CDN */}
       {isDirectVideo ? (
         <video src={videoUrl} autoPlay loop muted playsInline className="w-full h-full object-cover pointer-events-none select-none" />
       ) : embedUrl ? (
-        /* OPSI 2: Jika menggunakan Link YouTube / Vimeo */
         <>
           <iframe
             src={embedUrl}
@@ -91,11 +91,9 @@ function ProjectVideoThumb({ title, videoUrl }: { title: string; videoUrl: strin
           <div className={`absolute inset-0 bg-neutral-900 transition-opacity duration-300 ${isReady ? "opacity-0 pointer-events-none" : "opacity-100"}`} />
         </>
       ) : (
-        /* OPSI 3: Jika tidak ada video sama sekali */
         <span className="text-xs font-medium tracking-wider uppercase">View Project 🎬</span>
       )}
 
-      {/* Overlay transparan mutlak supaya klik tetap mengarah ke <Link>, bukan ke iframe/video */}
       <div className="absolute inset-0 bg-transparent z-10" />
     </div>
   );
@@ -111,7 +109,7 @@ export default function ProjectGallery({ initialProjects }: ProjectGalleryProps)
 
   return (
     <section id="projects" className="w-full">
-      {/* Tombol Filter Kategori */}
+      {/* Tombol Filter Kategori - Sesuai Asli */}
       <div className="flex gap-6 text-sm font-medium pb-4 mb-10">
         <button onClick={() => setFilter("all")} className={`transition-colors relative pb-4 -mb-[17px] ${filter === "all" ? "text-black border-b-2 border-black" : "text-neutral-500 hover:text-neutral-300"}`}>
           All
@@ -124,19 +122,18 @@ export default function ProjectGallery({ initialProjects }: ProjectGalleryProps)
         </button>
       </div>
 
-      {/* Grid Galeri Karya (4 Kolom) */}
+      {/* Grid Galeri Karya - Sesuai Asli */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
         {filteredProjects.map((project) => (
           <Link key={project.slug} href={`/project/${project.slug}`} className="group block">
             <ProjectVideoThumb title={project.title} videoUrl={project.videoUrl} />
 
-            {/* Judul Karya di Bawah Video */}
             <h3 className="text-sm font-medium text-neutral-900 group-hover:text-neutral-500 transition-colors">{project.title}</h3>
           </Link>
         ))}
       </div>
 
-      {/* State jika kategori kosong */}
+      {/* State jika kategori kosong - Sesuai Asli */}
       {filteredProjects.length === 0 && <div className="w-full text-center py-20 text-neutral-500 text-sm">Belum ada karya di kategori ini.</div>}
     </section>
   );

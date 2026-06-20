@@ -16,10 +16,6 @@ interface ProjectGalleryProps {
 
 function getEmbedUrl(url: string) {
   if (!url) return "";
-  // Jika ini berkas video langsung (Sanity CDN), lewati proses embed iframe
-  if (url.includes("cdn.sanity.io") || url.endsWith(".mp4") || url.endsWith(".webm")) {
-    return "";
-  }
 
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
   const match = url.match(regExp);
@@ -29,15 +25,15 @@ function getEmbedUrl(url: string) {
     const params = new URLSearchParams({
       autoplay: "1",
       mute: "1",
-      controls: "0",
+      controls: "0", // hilangkan semua UI bawaan YouTube
       showinfo: "0",
       rel: "0",
       loop: "1",
       playlist: videoId,
-      modestbranding: "1",
-      iv_load_policy: "3",
-      disablekb: "1",
-      fs: "0",
+      modestbranding: "1", // kecilkan logo YouTube
+      iv_load_policy: "3", // hilangkan anotasi
+      disablekb: "1", // matikan shortcut keyboard
+      fs: "0", // hilangkan tombol fullscreen
     });
     return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
   }
@@ -47,12 +43,13 @@ function getEmbedUrl(url: string) {
     const params = new URLSearchParams({
       autoplay: "1",
       muted: "1",
-      background: "1",
+      background: "1", // mode background Vimeo: otomatis hilangkan semua UI & title
       controls: "0",
     });
     return `https://player.vimeo.com/video/${vimeoId}?${params.toString()}`;
   }
 
+  // Jika berupa link berkas video langsung dari Sanity CDN, dikembalikan utuh 100%
   return url;
 }
 
@@ -60,40 +57,44 @@ function ProjectVideoThumb({ title, videoUrl }: { title: string; videoUrl: strin
   const [isReady, setIsReady] = useState(false);
   const embedUrl = getEmbedUrl(videoUrl);
 
-  // Deteksi apakah berkas video langsung dari Sanity CDN
-  const isDirectVideo = videoUrl && (videoUrl.includes("cdn.sanity.io") || videoUrl.endsWith(".mp4"));
+  // Cek apakah URL video berasal dari Sanity CDN
+  const isSanityVideo = embedUrl && (embedUrl.includes("cdn.sanity.io") || embedUrl.endsWith(".mp4") || embedUrl.endsWith(".webm"));
 
   useEffect(() => {
-    if (isDirectVideo) {
+    if (!embedUrl) return;
+    // Jika video Sanity, langsung set ready tanpa delay flash YouTube
+    if (isSanityVideo) {
       setIsReady(true);
       return;
     }
-    if (!embedUrl) return;
     const timer = setTimeout(() => setIsReady(true), 2000);
     return () => clearTimeout(timer);
-  }, [embedUrl, isDirectVideo]);
+  }, [embedUrl, isSanityVideo]);
 
   return (
-    /* STYLING BAWAAN KAMU - TIDAK DIUBAH SAMA SEKALI */
     <div className="aspect-[4/3] w-full bg-neutral-900 overflow-hidden mb-4 relative border border-neutral-900 group-hover:border-neutral-800 transition-all flex items-center justify-center text-neutral-700 group-hover:text-neutral-400">
-      {/* Otomatis memutar jika file video berasal dari Sanity CDN */}
-      {isDirectVideo ? (
-        <video src={videoUrl} autoPlay loop muted playsInline className="w-full h-full object-cover pointer-events-none select-none" />
-      ) : embedUrl ? (
+      {embedUrl ? (
         <>
-          <iframe
-            src={embedUrl}
-            className="w-full h-full scale-[1.5] object-cover pointer-events-none select-none"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            title={title}
-            tabIndex={-1}
-          />
+          {isSanityVideo ? (
+            /* Memutar video asli Sanity dengan konfigurasi autoplay & mute yang sama */
+            <video src={embedUrl} autoPlay loop muted playsInline className="w-full h-full object-cover pointer-events-none select-none" />
+          ) : (
+            /* Memutar link YouTube / Vimeo bawaan */
+            <iframe
+              src={embedUrl}
+              className="w-full h-full scale-[1.5] object-cover pointer-events-none select-none"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              title={title}
+              tabIndex={-1}
+            />
+          )}
+          {/* Overlay penutup flash awal video */}
           <div className={`absolute inset-0 bg-neutral-900 transition-opacity duration-300 ${isReady ? "opacity-0 pointer-events-none" : "opacity-100"}`} />
         </>
       ) : (
         <span className="text-xs font-medium tracking-wider uppercase">View Project 🎬</span>
       )}
-
+      {/* Overlay transparan mutlak supaya klik tetap mengarah ke <Link>, bukan ke iframe/video */}
       <div className="absolute inset-0 bg-transparent z-10" />
     </div>
   );
@@ -109,7 +110,7 @@ export default function ProjectGallery({ initialProjects }: ProjectGalleryProps)
 
   return (
     <section id="projects" className="w-full">
-      {/* Tombol Filter Kategori - Sesuai Asli */}
+      {/* Tombol Filter Kategori */}
       <div className="flex gap-6 text-sm font-medium pb-4 mb-10">
         <button onClick={() => setFilter("all")} className={`transition-colors relative pb-4 -mb-[17px] ${filter === "all" ? "text-black border-b-2 border-black" : "text-neutral-500 hover:text-neutral-300"}`}>
           All
@@ -122,18 +123,19 @@ export default function ProjectGallery({ initialProjects }: ProjectGalleryProps)
         </button>
       </div>
 
-      {/* Grid Galeri Karya - Sesuai Asli */}
+      {/* Grid Galeri Karya (4 Kolom Sesuai Gambar UI) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
         {filteredProjects.map((project) => (
           <Link key={project.slug} href={`/project/${project.slug}`} className="group block">
             <ProjectVideoThumb title={project.title} videoUrl={project.videoUrl} />
 
+            {/* Judul Karya di Bawah Video */}
             <h3 className="text-sm font-medium text-neutral-900 group-hover:text-neutral-500 transition-colors">{project.title}</h3>
           </Link>
         ))}
       </div>
 
-      {/* State jika kategori kosong - Sesuai Asli */}
+      {/* State jika kategori kosong */}
       {filteredProjects.length === 0 && <div className="w-full text-center py-20 text-neutral-500 text-sm">Belum ada karya di kategori ini.</div>}
     </section>
   );

@@ -4,20 +4,21 @@ import Hero from "@/components/Hero";
 import ProjectGallery from "@/components/ProjectGallery";
 import Footer from "@/components/Footer";
 
-// 1. Tambahkan ini agar Vercel selalu mengambil data video terbaru dari Sanity tanpa cache statis
+// Agar Vercel selalu mengambil data video terbaru dari Sanity tanpa cache statis
 export const revalidate = 0;
 
 async function getAllProjects() {
-  // Query ini otomatis memeriksa apakah nama field kamu 'video', 'videoLink', atau 'url'
+  // videoUrl adalah field type "url" biasa (string), langsung ambil tanpa coalesce/asset->url
   const query = `*[_type == "project"] | order(_createdAt desc) {
     title,
     "slug": slug.current,
     category,
-    "videoUrl": coalesce(video.asset->url, videoLink.asset->url, url.asset->url, video, videoLink, url)
+    videoUrl
   }`;
   const data = await client.fetch(query);
   return data;
 }
+
 export default async function HomePage() {
   const projects = await getAllProjects();
 

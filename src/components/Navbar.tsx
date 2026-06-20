@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 // "About" dan "Contact" sekarang halaman terpisah (route), "Projects" tetap anchor di homepage
 const NAV_LINKS = [
-  { href: "#projects", label: "Projects", type: "hash" as const },
+  { href: "/", label: "Projects", type: "hash" as const },
   { href: "/about", label: "About", type: "route" as const },
   { href: "/contact", label: "Contact", type: "route" as const },
 ];

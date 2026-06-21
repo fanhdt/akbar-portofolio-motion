@@ -1,3 +1,4 @@
+// src/components/ProjectRecomendation.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -51,6 +52,11 @@ function getEmbedUrl(url?: string) {
   return url;
 }
 
+/**
+ * Komponen terpisah per-card supaya tiap video punya state "ready" sendiri.
+ * Overlay hitam pekat menutupi iframe selama beberapa saat pertama untuk
+ * menyembunyikan flash logo/tombol YouTube sebelum autoplay jalan bersih.
+ */
 function RecommendationVideoThumb({ title, videoUrl }: { title: string; videoUrl?: string }) {
   const [isReady, setIsReady] = useState(false);
   const embedUrl = getEmbedUrl(videoUrl);
@@ -62,12 +68,12 @@ function RecommendationVideoThumb({ title, videoUrl }: { title: string; videoUrl
   }, [embedUrl]);
 
   return (
-    <div className="aspect-[4/3] w-full bg-black overflow-hidden mb-3 relative flex items-center justify-center text-neutral-600">
+    <div className="aspect-video w-full bg-black overflow-hidden mb-3 relative flex items-center justify-center text-neutral-600">
       {embedUrl ? (
         <>
           <iframe
             src={embedUrl}
-            className="w-full h-full scale-[1.6] object-cover pointer-events-none select-none"
+            className="w-full h-full scale-[1.02] object-cover pointer-events-none select-none"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             title={title}
             tabIndex={-1}

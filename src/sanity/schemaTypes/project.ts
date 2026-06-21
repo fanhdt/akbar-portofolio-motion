@@ -20,7 +20,6 @@ export default {
       },
       validation: (Rule: any) => Rule.required(),
     },
-    // ➕ TAMBAHAN BARU SESUAI GAMBAR MOCKUP
     {
       name: "clientName",
       title: "Nama Client / Universitas",
@@ -36,7 +35,6 @@ export default {
       title: "Motion Design By",
       type: "string",
     },
-    // ------------------------------------
     {
       name: "videoUrl",
       title: "Link Video (YouTube/Vimeo)",
@@ -60,6 +58,34 @@ export default {
         layout: "radio",
       },
       validation: (Rule: any) => Rule.required(),
+    },
+    // ➕ TAMBAHAN: Styleframes (gambar still-frame, fallback ke video di bawah)
+    {
+      name: "styleframes",
+      title: "Styleframes (gambar)",
+      description: "Upload beberapa gambar still-frame. Kosongkan kalau mau pakai video loop otomatis/manual di bawah.",
+      type: "array",
+      of: [
+        {
+          type: "image",
+          options: { hotspot: true },
+          fields: [{ name: "caption", title: "Caption (opsional)", type: "string" }],
+        },
+      ],
+    },
+    // ➕ TAMBAHAN: Highlight video loop pendek (override manual untuk auto-loop dari YouTube)
+    {
+      name: "highlightClips",
+      title: "Highlight Clips (video loop pendek)",
+      description: "Upload beberapa video pendek (mp4, idealnya 2-5 detik, tanpa suara) untuk ditampilkan sebagai highlight loop. Kalau dikosongkan, sistem otomatis bikin loop dari video utama (YouTube) di beberapa timestamp.",
+      type: "array",
+      of: [
+        {
+          type: "file",
+          options: { accept: "video/*" },
+          fields: [{ name: "caption", title: "Caption (opsional)", type: "string" }],
+        },
+      ],
     },
   ],
 };

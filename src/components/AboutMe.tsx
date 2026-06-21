@@ -13,7 +13,6 @@ interface AboutMeData {
   links: { label: string; href: string }[];
 }
 
-
 const aboutData: AboutMeData = {
   name: "Muhammad Akbar Robbani",
   role: "Motion Designer",
@@ -52,11 +51,8 @@ export default function AboutMe() {
 
         {/* Info: nama, role, tahun, deskripsi */}
         <div className="flex flex-col">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight tracking-tight">
-            {name}
-            <br />
-            {role}
-          </h1>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight tracking-tight">{name}</h1>
+          <h1 className="py-2 text-xl md:text-2xl lg:text-4xl  leading-tight tracking-tight">{role}</h1>
 
           <div className="mt-12 md:mt-20 max-w-2xl space-y-5 text-sm md:text-base leading-relaxed">
             <p className="text-neutral-900">{year}</p>

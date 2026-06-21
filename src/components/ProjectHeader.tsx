@@ -15,7 +15,7 @@ export default function ProjectHeader({ project }: ProjectHeaderProps) {
     <section className="grid grid-cols-1 md:grid-cols-[auto_auto_1fr] gap-x-6 md:gap-x-8 gap-y-6 mb-10 items-start font-sans bg-white">
       {/* Kolom 1: Judul Utama */}
       <div>
-        <h1 className="text-3xl md:text-8xl font-bold tracking-tight text-neutral-900">{title}</h1>
+        <h1 className="text-3xl md:text-6xl font-bold tracking-tight text-neutral-900">{title}</h1>
       </div>
 
       {/* Kolom 2: Metadata Klien & Tim - dipaksa 1 baris pakai whitespace-nowrap */}
@@ -35,7 +35,10 @@ export default function ProjectHeader({ project }: ProjectHeaderProps) {
         {motionDesign && (
           <p className="whitespace-nowrap">
             <span className="font-semibold text-neutral-900">Motion Design : </span>
-            <span className="text-neutral-900"><br />{motionDesign}</span>
+            <span className="text-neutral-900">
+              <br />
+              {motionDesign}
+            </span>
           </p>
         )}
       </div>

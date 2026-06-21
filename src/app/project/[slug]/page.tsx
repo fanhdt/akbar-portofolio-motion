@@ -1,7 +1,8 @@
+
 import { client } from "@/sanity/lib/client";
 import ProjectHeader from "@/components/ProjectHeader";
 import ProjectVideoSection from "@/components/ProjectVideoSection";
-import ProjectRecommendations from "@/components/ProjectRecomendation";
+import StyleframesSection from "@/components/StyleframeSection";
 import Footer from "@/components/Footer";
 
 interface ProjectProps {
@@ -17,19 +18,17 @@ async function getProjectDetail(slug: string) {
     videoUrl,
     description,
     category,
-    "slug": slug.current
+    "slug": slug.current,
+    "styleframes": styleframes[] {
+      "url": asset->url,
+      caption
+    },
+    "highlightClips": highlightClips[] {
+      "url": asset->url,
+      caption
+    }
   }`;
   return await client.fetch(query, { slug });
-}
-
-async function getRecommendations(currentSlug: string) {
-  // Tambahkan videoUrl supaya video di grid rekomendasi juga ikut autoplay
-  const query = `*[_type == "project" && slug.current != $currentSlug][0...6] {
-    title,
-    "slug": slug.current,
-    videoUrl
-  }`;
-  return await client.fetch(query, { currentSlug });
 }
 
 export default async function ProjectDetailPage({ params }: ProjectProps) {
@@ -37,7 +36,6 @@ export default async function ProjectDetailPage({ params }: ProjectProps) {
   const { slug } = resolvedParams;
 
   const project = await getProjectDetail(slug);
-  const recommendations = await getRecommendations(slug);
 
   if (!project) {
     return <div className="min-h-screen flex items-center justify-center bg-white text-neutral-900 font-sans">Project tidak ditemukan atau belum di-publish.</div>;
@@ -50,14 +48,12 @@ export default async function ProjectDetailPage({ params }: ProjectProps) {
         <ProjectHeader project={project} />
       </main>
 
-      {/* Section 2: Pemutar Video Utama (sudah ada padding + bg putih sendiri di komponennya) */}
+      {/* Section 2: Pemutar Video Utama */}
       <ProjectVideoSection videoUrl={project.videoUrl} />
 
       <main className="px-6 md:px-16">
-        {/* Section 3: Grid Rekomendasi */}
-        <div className="pt-0">
-          <ProjectRecommendations projects={recommendations} />
-        </div>
+        {/* Section 3: Styleframes - video clip manual / gambar manual / auto-loop YouTube */}
+        <StyleframesSection styleframes={project.styleframes} highlightClips={project.highlightClips} videoUrl={project.videoUrl} />
 
         <Footer />
       </main>

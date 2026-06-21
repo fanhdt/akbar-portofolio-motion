@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 
-// "About" dan "Contact" sekarang halaman terpisah (route), "Projects" tetap anchor di homepage
 const NAV_LINKS = [
   { href: "/", label: "Projects", type: "hash" as const },
   { href: "/about", label: "About", type: "route" as const },
@@ -45,8 +44,18 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, [pathname]);
 
+  // PERBAIKAN ADA DI SINI
   const isLinkActive = (link: (typeof NAV_LINKS)[number]) => {
-    if (link.type === "route") return pathname === link.href;
+    if (link.type === "route") {
+      return pathname === link.href;
+    }
+
+    // Jika tipenya hash, dan href-nya persis "/", kita langsung cek apakah sedang di halaman utama
+    if (link.href === "/") {
+      return pathname === "/";
+    }
+
+    // Jika kedepannya kamu menambahkan link hash asli (misal href: "#skills"), logika ini akan menanganinya
     return pathname === "/" && activeSection === link.href;
   };
 

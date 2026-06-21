@@ -2,7 +2,6 @@ const SOCIALS = [
   {
     label: "Instagram",
     href: "https://instagram.com/akbarrbni",
-
     icon: (
       <svg role="img" viewBox="0 0 24 24" className="w-4 h-4 fill-current">
         <path d="M12 0C8.74 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.74 0 12s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.977 6.98 1.281.058 1.689.072 4.948.072 3.257 0 3.664-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.257-.014-3.664-.073-4.947-.2-4.354-2.617-6.78-6.979-6.98C15.664.014 15.257 0 12 0zm0 5.838a6.162 6.162 0 1 1 0 12.324 6.162 6.162 0 0 1 0-12.324zM12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
@@ -40,23 +39,25 @@ const SOCIALS = [
 
 export default function Footer() {
   return (
-    <footer className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 py-8 border-t border-neutral-200 text-sm text-neutral-700">
+    <footer className="flex flex-col items-center gap-6 py-8 border-t border-neutral-200 text-sm text-neutral-700 text-center sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:text-left">
       <p>Muhammad Akbar Robbani — Bandung, Indonesia</p>
 
-      <div className="flex items-center gap-6">
-        <a href="mailto:akbarrbni03@gmail.com" className="hover:text-neutral-900 transition-colors">
+      <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
+        {/* Perbaikan 1: Atribut dimasukkan ke dalam tag <a> */}
+        <a href="mailto:akbarrbni03@gmail.com" className="hover:text-neutral-900 transition-colors break-all sm:break-normal">
           akbarrbni03@gmail.com
         </a>
 
         <div className="flex items-center gap-3">
           {SOCIALS.map((social) => (
+            /* Perbaikan 2: Atribut dimasukkan ke dalam tag <a> */
             <a
               key={social.label}
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={social.label}
-              className="w-8 h-8 rounded-full bg-neutral-200 hover:bg-neutral-300 transition-colors flex items-center justify-center text-neutral-600 hover:text-neutral-900"
+              className="w-10 h-10 sm:w-8 sm:h-8 rounded-full bg-neutral-200 hover:bg-neutral-300 active:bg-neutral-300 transition-colors flex items-center justify-center text-neutral-600 hover:text-neutral-900 shrink-0"
             >
               {social.icon}
             </a>

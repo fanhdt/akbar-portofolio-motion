@@ -150,7 +150,7 @@ export default function ProjectGallery({ initialProjects }: ProjectGalleryProps)
   return (
     <section id="projects" className="w-full">
       {/* Tombol Filter Kategori - garis bawah geser smooth + tap feedback */}
-      <div className="flex gap-6 text-base font-medium pb-4">
+      <div className="flex gap-6 text-base font-semibold pb-4">
         {FILTERS.map((f) => {
           const isActive = filter === f.value;
           return (
